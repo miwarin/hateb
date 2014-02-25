@@ -28,6 +28,8 @@ namespace hateb2
         public frmMain()
         {
             InitializeComponent();
+            loadUsername();
+            loadAPIKey();
         }
 
         private void btnHateb_Click(object sender, EventArgs e)
@@ -56,6 +58,16 @@ namespace hateb2
         {
             String username = txtUsername.Text;
             return username;
+        }
+
+        private void loadUsername()
+        {
+            txtUsername.Text = Properties.Settings.Default.ID;
+        }
+
+        private void loadAPIKey()
+        {
+            txtAPIKey.Text = Properties.Settings.Default.APIKEY;
         }
 
         private String getApikey()
@@ -96,6 +108,18 @@ namespace hateb2
 
             byte[] data = Encoding.UTF8.GetBytes(entry);
             return data;
+        }
+
+        private void txtUsername_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ID = txtUsername.Text;
+            Properties.Settings.Default.Save();
+        }
+
+        private void txtAPIKey_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.APIKEY = txtAPIKey.Text;
+            Properties.Settings.Default.Save();
         }
     
     }

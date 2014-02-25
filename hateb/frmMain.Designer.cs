@@ -73,6 +73,7 @@
             this.txtAPIKey.Name = "txtAPIKey";
             this.txtAPIKey.Size = new System.Drawing.Size(268, 19);
             this.txtAPIKey.TabIndex = 8;
+            this.txtAPIKey.TextChanged += new System.EventHandler(this.txtAPIKey_TextChanged);
             // 
             // txtUsername
             // 
@@ -81,6 +82,7 @@
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(268, 19);
             this.txtUsername.TabIndex = 7;
+            this.txtUsername.TextChanged += new System.EventHandler(this.txtUsername_TextChanged);
             // 
             // btnHateb
             // 
