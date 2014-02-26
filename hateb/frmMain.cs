@@ -19,10 +19,15 @@ namespace hateb2
 
     public partial class frmMain : Form
     {
-        struct PostURI
+        class PostURI
         {
-            public String uri;
-            public String comment;
+            public PostURI(String uri, String comment)
+            {
+                this.uri = uri;
+                this.comment = comment;
+            }
+            public String uri { get; set; }
+            public String comment { get; set; }
         }
 
         public frmMain()
@@ -76,28 +81,61 @@ namespace hateb2
             return apikey;
         }
 
+        enum ST
+        {
+            URI,
+            COMMENT,
+        };
+
+        // フォーマット
+        //
+        //   空白行 0 行以上
+        //   URI
+        //   コメント0 or 1行
+        //   空白行 1 行以上
+        //   URI
+        //   コメント0 or 1行
+        //   空白行 1 行以上
+        //     :
         private ArrayList getURI()
         {
             ArrayList uris = new ArrayList();
             String text = txtInput.Text;
             String[] sp = text.Split(new String[] { "\r\n" }, StringSplitOptions.None);
-            int count = sp.Count();
-            int i;
+            ST st = ST.URI;
+            String tmp_uri = "";
 
-            for (i = 0; i < count; )
+            foreach(String line in sp)
             {
-                if (sp[i] == "")
+                switch(st)
                 {
-                    break;
+                    case ST.URI:
+
+                        // URI として正しいかどうかを例外でチェック
+                        try
+                        {
+                            Uri uri = new Uri(line);
+                            tmp_uri = uri.AbsoluteUri;
+                            st = ST.COMMENT;
+                        }
+                        catch (UriFormatException ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                        break;
+
+                    case ST.COMMENT:
+                        uris.Add(new PostURI(tmp_uri, line));
+                        st = ST.URI;
+                        break;
+
+                    default:
+                        break;
                 }
-                PostURI pu = new PostURI();
-                pu.uri = sp[i];
-                pu.comment = sp[i + 1];
-                uris.Add(pu);
-                i += 2;
             }
             return uris;
         }
+        
 
         // タイトルはダミー
         // はてなのAPIをつかってみた / Rails4とWSSE認証 | Workabroad.jp http://www.workabroad.jp/posts/2040
